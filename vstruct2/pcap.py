@@ -55,22 +55,22 @@ def pad4bytes(size):
 class PCAP_FILE_HEADER(VStruct):
     def __init__(self):
         VStruct.__init__(self)
-        self.magic = self.v_uint32()
-        self.vers_maj = self.v_uint16()
-        self.vers_min = self.v_uint16()
-        self.thiszone = self.v_uint32()
-        self.sigfigs = self.v_uint32()
-        self.snaplen = self.v_uint32()
-        self.linktype = self.v_uint32()
+        self.magic = uint32()
+        self.vers_maj = uint16()
+        self.vers_min = uint16()
+        self.thiszone = uint32()
+        self.sigfigs = uint32()
+        self.snaplen = uint32()
+        self.linktype = uint32()
 
 
 class PCAP_PACKET_HEADER(VStruct):
     def __init__(self):
         VStruct.__init__(self)
-        self.tvsec = self.v_uint32()
-        self.tvusec = self.v_uint32()
-        self.caplen = self.v_uint32()
-        self.len = self.v_uint32()
+        self.tvsec = uint32()
+        self.tvusec = uint32()
+        self.caplen = suint32()
+        self.len = uint32()
 
 
 class PCAPNG_GENERIC_BLOCK_HEADER(VStruct):
@@ -80,8 +80,8 @@ class PCAPNG_GENERIC_BLOCK_HEADER(VStruct):
 
     def __init__(self, bigend=False):
         VStruct.__init__(self)
-        self.blocktype = self.v_uint32(bigend=bigend)
-        self.blocksize = self.v_uint32(bigend=bigend)
+        self.blocktype = uint32(bigend=bigend)
+        self.blocksize = uint32(bigend=bigend)
 
 
 class PCAPNG_BLOCK_PARENT(VStruct):
@@ -118,12 +118,12 @@ class PCAPNG_BLOCK_PARENT(VStruct):
 class PCAPNG_SECTION_HEADER_BLOCK(PCAPNG_BLOCK_PARENT):
     def __init__(self, bigend=False):
         PCAPNG_BLOCK_PARENT.__init__(self, bigend)
-        self.blocktype = self.v_uint32(bigend=bigend)
-        self.blocksize = self.v_uint32(bigend=bigend)
-        self.bom = self.v_uint32(bigend=bigend)
-        self.vers_maj = self.v_uint16(bigend=bigend)
-        self.vers_min = self.v_uint16(bigend=bigend)
-        self.sectionsize = self.v_uint64(bigend=bigend)
+        self.blocktype = uint32(bigend=bigend)
+        self.blocksize = uint32(bigend=bigend)
+        self.bom = uint32(bigend=bigend)
+        self.vers_maj = uint16(bigend=bigend)
+        self.vers_min = uint16(bigend=bigend)
+        self.sectionsize = uint64(bigend=bigend)
         self.options = VArray([])
         # blocksize2: dynamcally added in vsParse()
         # self.blocksize2     = v_uint32(bigend=bigend)
@@ -140,9 +140,9 @@ class PCAPNG_SECTION_HEADER_BLOCK(PCAPNG_BLOCK_PARENT):
 class PCAPNG_OPTION(VStruct):
     def __init__(self, bigend=False):
         VStruct.__init__(self)
-        self.code = self.v_uint16(bigend=bigend)
-        self.optsize = self.v_uint16(bigend=bigend)
-        self.bytes = self.v_bytes(0)
+        self.code = uint16(bigend=bigend)
+        self.optsize = uint16(bigend=bigend)
+        self.bytes = bytes(0)
 
     def pcb_optsize(self):
         size = pad4bytes(self.optsize)
@@ -152,11 +152,11 @@ class PCAPNG_OPTION(VStruct):
 class PCAPNG_INTERFACE_DESCRIPTION_BLOCK(PCAPNG_BLOCK_PARENT):
     def __init__(self, bigend=False):
         PCAPNG_BLOCK_PARENT.__init__(self, bigend)
-        self.blocktype = self.v_uint32(bigend=bigend)
-        self.blocksize = self.v_uint32(bigend=bigend)
-        self.linktype = self.v_uint16(bigend=bigend)
-        self.reserved = self.v_uint16(bigend=bigend)
-        self.snaplen = self.v_uint32(bigend=bigend)
+        self.blocktype = uint32(bigend=bigend)
+        self.blocksize = uint32(bigend=bigend)
+        self.linktype = uint16(bigend=bigend)
+        self.reserved = uint16(bigend=bigend)
+        self.snaplen = uint32(bigend=bigend)
         self.options = VArray([])
         # blocksize2: dynamcally added in vsParse()
         # self.blocksize2     = v_uint32(bigend=bigend)
@@ -187,14 +187,14 @@ class PCAPNG_INTERFACE_DESCRIPTION_BLOCK(PCAPNG_BLOCK_PARENT):
 class PCAPNG_ENHANCED_PACKET_BLOCK(PCAPNG_BLOCK_PARENT):
     def __init__(self, bigend=False):
         PCAPNG_BLOCK_PARENT.__init__(self, bigend)
-        self.blocktype = self.v_uint32(bigend=bigend)
-        self.blocksize = self.v_uint32(bigend=bigend)
-        self.interfaceid = self.v_uint32(bigend=bigend)
-        self.tstamphi = self.v_uint32(bigend=bigend)
-        self.tstamplow = self.v_uint32(bigend=bigend)
-        self.caplen = self.v_uint32(bigend=bigend)
-        self.packetlen = self.v_uint32(bigend=bigend)
-        self.data = self.v_bytes(0)
+        self.blocktype = uint32(bigend=bigend)
+        self.blocksize = uint32(bigend=bigend)
+        self.interfaceid = uint32(bigend=bigend)
+        self.tstamphi = uint32(bigend=bigend)
+        self.tstamplow = uint32(bigend=bigend)
+        self.caplen = uint32(bigend=bigend)
+        self.packetlen = uint32(bigend=bigend)
+        self.data = bytes(0)
         self.options = VArray([])
         # blocksize2: dynamcally added in vsParse()
         # self.blocksize2     = v_uint32(bigend=bigend)
@@ -233,11 +233,11 @@ class PCAPNG_SIMPLE_PACKET_BLOCK(VStruct):
 
     def __init__(self, bigend = False):
         VStruct.__init__(self)
-        self.blocktype = self.v_uint32(bigend=bigend)
-        self.blocksize = self.v_uint32(bigend=bigend)
-        self.packetlen = self.v_uint32(bigend=bigend)
-        self.data = self.v_bytes(0)
-        self.blocksize2 = self.v_uint32(bigend=bigend)
+        self.blocktype = uint32(bigend=bigend)
+        self.blocksize = uint32(bigend=bigend)
+        self.packetlen = uint32(bigend=bigend)
+        self.data = bytes(0)
+        self.blocksize2 = uint32(bigend=bigend)
 
     def pcb_blocksize(self):
         self.caplen = pad4bytes(self.blocksize - 16)
