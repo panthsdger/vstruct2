@@ -69,7 +69,7 @@ class PCAP_PACKET_HEADER(VStruct):
         VStruct.__init__(self)
         self.tvsec = uint32()
         self.tvusec = uint32()
-        self.caplen = suint32()
+        self.caplen = uint32()
         self.len = uint32()
 
 
